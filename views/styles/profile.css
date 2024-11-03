@@ -1,0 +1,78 @@
+body {
+    font-family: 'Roboto', sans-serif; /* Cambiado a Roboto */
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background: #35424a;
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+main {
+    padding: 20px;
+    max-width: 600px;
+    margin: 20px auto;
+    background: #ffffff;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-container {
+    text-align: left;
+}
+
+.profile-container h2 {
+    color: #35424a; /* Color para el nombre del usuario */
+}
+
+.profile-container p {
+    margin: 10px 0; /* Espaciado entre párrafos */
+}
+
+.edit-button {
+    padding: 10px 15px;
+    background: #35424a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold; /* Texto en negrita */
+}
+
+.edit-button:hover {
+    background: #5a6e76; /* Cambio de color al pasar el ratón */
+}
+
+.publications-list {
+    list-style-type: none; /* Eliminar viñetas de la lista */
+    padding: 0; /* Sin padding */
+}
+
+.publication-item {
+    background: #f4f4f4; /* Fondo claro */
+    padding: 10px;
+    margin: 10px 0; /* Espaciado entre publicaciones */
+    border-radius: 5px; /* Bordes redondeados para las publicaciones */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px 0;
+    background: #35424a;
+    color: #ffffff;
+}
+
+footer p {
+    margin: 0;
+}

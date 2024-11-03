@@ -1,0 +1,91 @@
+body {
+    font-family: 'Roboto', sans-serif; /* Cambiado a Roboto */
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background: #35424a;
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+main {
+    padding: 20px;
+    max-width: 600px; /* Ancho máximo para el contenido */
+    margin: 40px auto; /* Espaciado superior e inferior */
+    background: #ffffff;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+    display: flex; /* Usar flexbox para alinear elementos */
+    margin-bottom: 20px; /* Espacio debajo del contenedor de búsqueda */
+}
+
+.search-input {
+    flex: 1; /* Permitir que el input tome el espacio restante */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Bordes redondeados para el input */
+    margin-right: 10px; /* Espacio a la derecha del input */
+}
+
+.search-button {
+    padding: 10px 15px;
+    background: #35424a;
+    color: white;
+    border: none;
+    border-radius: 5px; /* Bordes redondeados para el botón */
+    cursor: pointer;
+    font-weight: bold; /* Texto en negrita */
+}
+
+.search-button:hover {
+    background: #5a6e76; /* Color al pasar el ratón */
+}
+
+.results-list {
+    list-style-type: none; /* Quitar los puntos de la lista */
+    padding: 0; /* Quitar el padding de la lista */
+}
+
+.results-list li {
+    display: flex; /* Usar flexbox para los items de la lista */
+    justify-content: space-between; /* Espacio entre el nombre y el botón */
+    padding: 10px;
+    border-bottom: 1px solid #ccc; /* Línea debajo de cada item */
+}
+
+.add-button {
+    padding: 5px 10px;
+    background: #28a745; /* Color verde para el botón de agregar */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background: #218838; /* Color más oscuro al pasar el ratón */
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px 0;
+    background: #35424a;
+    color: #ffffff;
+}
+
+footer p {
+    margin: 0;
+}

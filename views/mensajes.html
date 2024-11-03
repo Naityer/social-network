@@ -1,0 +1,54 @@
+<!-- views/messages.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensajes</title>
+    <link rel="stylesheet" href="styles/mensajes.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Mensajes</h1>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="conversaciones">
+                <h2>Conversaciones</h2>
+                <div class="conversacion">
+                    <p><strong>Conversación con: Maria Lopez</strong></p>
+                    <p><em>Último mensaje: Hola, ¿cómo estás?</em></p>
+                    <button onclick="abrirConversacion()">Abrir Conversación</button>
+                </div>
+                <!-- Puedes agregar más conversaciones aquí -->
+            </div>
+
+            <div class="ventana-mensajes">
+                <h3>Chat con Maria Lopez</h3>
+                <div class="mensajes">
+                    <p><strong>Tú:</strong> Hola, Maria.</p>
+                    <p><strong>Maria Lopez:</strong> Hola, ¿cómo estás?</p>
+                </div>
+                <form action="/enviar-mensaje" method="post" class="mensaje-form">
+                    <input type="text" name="mensaje" placeholder="Escribe un mensaje" required>
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Red Social. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        function abrirConversacion() {
+            alert("Abriendo conversación...");
+        }
+    </script>
+</body>
+</html>
