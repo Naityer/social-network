@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const path = require('path');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const publicacionRoutes = require('./routes/publicacionRoutes'); // Añadir la ruta de publicaciones
+const userController = require('./controllers/userController'); 
 
 // Configuración de variables de entorno
 dotenv.config();
@@ -20,6 +22,7 @@ app.use(express.static('views'));
 // Rutas de autenticación y perfil de usuario
 app.use('/api/auth', authRoutes);  // Ruta para autenticación (registro e inicio de sesión)
 app.use('/api/user', userRoutes);  // Ruta para perfil de usuario
+app.use('/api/publicaciones', publicacionRoutes); // Ruta para gestión de publicaciones
 
 // Ruta principal para mostrar index.html
 app.get('/', (req, res) => {
@@ -35,6 +38,22 @@ app.get('/register', (req, res) => {
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'login.html'));
 });
+
+// app.get('/profile', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'profile.html'));
+// });
+
+// app.get('/search-friends', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'search-friends.html'));
+// });
+
+// app.get('/timeline', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'timeline.html'));
+// });
+
+// app.get('/mensajes', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'views', 'mensajes.html'));
+// });
 
 // Middleware para manejar errores (opcional, pero recomendado)
 app.use((err, req, res, next) => {

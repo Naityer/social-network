@@ -12,4 +12,11 @@ router.put('/profile/:id', userController.updateUserProfile);
 // Eliminar un usuario
 router.delete('/profile/:id', userController.deleteUser);
 
+router.get('/usuario', userController.obtenerUsuario);
+router.get('/amigos', userController.obtenerAmigos);
+
+// Ruta para buscar amigos
+router.get('/search', userController.searchFriends);
+router.get('/friend-suggestions', userController.getFriendSuggestions);
+
 module.exports = router;

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Social - Inicio</title>
+    <link rel="stylesheet" href="styles/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Contenedor Principal -->
+    <div class="app-container">
+        <!-- Línea de Tiempo (Página de Inicio) -->
+        <section id="timeline" class="section active">
+            <h2>Inicio</h2>
+            <div class="post">
+                <div class="post-header">
+                    <img src="images/user1.jpg" alt="Foto de perfil" class="profile-pic">
+                    <p><strong>Juan Perez</strong></p>
+                </div>
+                <img src="images/post1.jpg" alt="Publicación" class="post-image">
+                <div class="post-footer">
+                    <button><i class="far fa-heart"></i></button>
+                    <button><i class="far fa-comment"></i></button>
+                    <p><strong>Juan Perez</strong> Me encanta este lugar!</p>
+                    <small>Hace 5 minutos</small>
+                </div>
+            </div>
+            <!-- Más publicaciones de ejemplo aquí -->
+        </section>
+
+        <!-- Perfil de Usuario -->
+        <section id="profile" class="section">
+            <h2>Perfil</h2>
+            <div class="profile-info">
+                <img src="images/user1.jpg" alt="Foto de perfil" class="profile-pic-large">
+                <h3>Juan Perez</h3>
+                <p>Nombre de usuario: juan_perez</p>
+                <button class="edit-profile">Editar Perfil</button>
+                <h4>Amigos:</h4>
+                <ul class="friends-list">
+                    <li><img src="images/user2.jpg" alt="Amigo 1"></li>
+                    <li><img src="images/user3.jpg" alt="Amigo 2"></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Búsqueda de Amigos -->
+        <section id="search-friends" class="section">
+            <h2>Buscar Amigos</h2>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar por nombre o usuario" class="search-input">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <ul class="search-results">
+                <li>
+                    <img src="images/user2.jpg" alt="Usuario 1">
+                    <p>Maria Lopez</p>
+                    <button class="add-friend-button">Agregar</button>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Mensajes -->
+        <section id="messages" class="section">
+            <h2>Mensajes Directos</h2>
+            <div class="messages-container">
+                <div class="conversation">
+                    <p><strong>Conversación con Maria Lopez</strong></p>
+                    <p>Último mensaje: Hola, ¿cómo estás?</p>
+                </div>
+                <div class="chat-window">
+                    <p><strong>Juan:</strong> Hola Maria!</p>
+                    <p><strong>Maria Lopez:</strong> ¡Hola! ¿Todo bien?</p>
+                    <form class="message-form">
+                        <input type="text" placeholder="Escribe un mensaje">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Barra de Navegación -->
+    <nav class="navbar">
+        <button class="nav-button" data-target="timeline" data-href="home.html"><i class="fas fa-home"></i></button>
+        <button class="nav-button" data-target="search-friends" data-href="search-friends.html"><i class="fas fa-search"></i></button>
+        <button class="nav-button" data-target="profile" data-href="profile.html"><i class="fas fa-user"></i></button>
+        <button class="nav-button" data-target="messages" data-href="mensajes.html"><i class="fas fa-comments"></i></button>
+    </nav>
+
+    <!-- Script para Manejo de Navegación -->
+    <script>
+        const buttons = document.querySelectorAll(".nav-button");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                const targetUrl = button.getAttribute("data-href");
+                window.location.href = targetUrl; // Redirigir a la URL correspondiente
+            });
+        });
+    </script>
+</body>
+</html>

@@ -17,7 +17,7 @@
     </header>
     <main>
         <div class="container">
-            <form action="/api/auth/login" method="post" class="login-form">
+            <form id="loginForm" class="login-form">
                 <label for="nombreUsuario">Nombre de Usuario:</label>
                 <input type="text" id="nombreUsuario" name="nombreUsuario" required>
                 
@@ -28,10 +28,50 @@
                 
                 <p class="register-prompt">No tienes una cuenta? <a href="register.html">Regístrate aquí</a></p>
             </form>
+            <div id="error-message" style="color: red; margin-top: 10px;"></div> <!-- Mensaje de error -->
         </div>
     </main>
     <footer>
         <p>&copy; 2024 Red Social. Todos los derechos reservados.</p>
     </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevenir el envío del formulario
+            
+            const nombreUsuario = document.getElementById('nombreUsuario').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/auth/login', { // Cambia la ruta según sea necesario
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nombreUsuario, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Almacenar el token y el ID del usuario en el almacenamiento local
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userId', data.userId);
+                    
+                    // Redirigir a home.html
+                    window.location.href = 'home.html';
+                } else {
+                    // Mostrar el mensaje de error
+                    document.getElementById('error-message').innerText = data.error;
+                }
+            } catch (error) {
+                console.error("Error al iniciar sesión:", error);
+                document.getElementById('error-message').innerText = 'Error en la conexión.';
+            }
+        });
+    </script>
+
+     <!-- Incluye tu script aquí -->
+     <script src="scripts/login.js"></script> <!-- Asegúrate de que la ruta sea correcta -->
 </body>
 </html>

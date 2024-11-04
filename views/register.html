@@ -15,7 +15,7 @@
     </header>
     <main>
         <div class="form-container">
-            <form action="/api/auth/register" method="post">
+            <form id="registerForm">
                 <label for="nombreCompleto">Nombre Completo:</label>
                 <input type="text" id="nombreCompleto" name="nombreCompleto" required>
                 
@@ -32,10 +32,42 @@
                 
                 <p class="login-prompt">¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
             </form>
+            <div id="error-message" style="color: red; margin-top: 10px;"></div> <!-- Mensaje de error -->
         </div>
     </main>
-    <footer>
-        <p>&copy; 2024 Red Social. Todos los derechos reservados.</p>
-    </footer>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevenir el envío del formulario
+            
+            const nombreCompleto = document.getElementById('nombreCompleto').value;
+            const nombreUsuario = document.getElementById('nombreUsuario').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/auth/register', { // Cambia la ruta según sea necesario
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nombreCompleto, nombreUsuario, email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Registro exitoso, redirigir a la página de inicio de sesión
+                    window.location.href = 'login.html';
+                } else {
+                    // Mostrar el mensaje de error
+                    document.getElementById('error-message').innerText = data.error;
+                }
+            } catch (error) {
+                console.error("Error al registrar:", error);
+                document.getElementById('error-message').innerText = 'Error en la conexión.';
+            }
+        });
+    </script>
 </body>
 </html>

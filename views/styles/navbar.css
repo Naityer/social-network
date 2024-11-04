@@ -1,0 +1,90 @@
+/* Barra de navegación */
+.navbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Perfil */
+.profile-info {
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-pic-large {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+}
+
+/* Búsqueda de Amigos */
+.search-bar {
+    display: flex;
+    gap: 5px;
+    padding: 20px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.search-results {
+    list-style: none;
+    padding: 20px;
+}
+
+.search-results li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.add-friend-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Mensajes */
+.messages-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.chat-window {
+    flex: 1;
+}
+
+.message-form {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.message-form input {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
