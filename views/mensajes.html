@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mensajes</title>
     <link rel="stylesheet" href="styles/mensajes.css">
-    <link rel="stylesheet" href="styles/navbar.css"> <!-- Importa la barra de navegación -->
+    <link rel="stylesheet" href="styles/navbar.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -18,25 +18,36 @@
     
     <main>
         <div class="container">
+            <!-- Lista de conversaciones -->
             <div class="conversaciones">
                 <h2>Conversaciones</h2>
-                <div class="conversacion">
-                    <p><strong>Conversación con: Maria Lopez</strong></p>
-                    <p><em>Último mensaje: Hola, ¿cómo estás?</em></p>
-                    <button onclick="abrirConversacion()">Abrir Conversación</button>
+                
+                <!-- Sección de conversaciones con amigos -->
+                <div class="conversaciones-amigos">
+                    <h3>Amigos</h3>
+                    <div id="conversation-list-friends">
+                        <!-- Las conversaciones de amigos se cargarán aquí dinámicamente -->
+                    </div>
                 </div>
-                <!-- Puedes agregar más conversaciones aquí -->
+                
+                <!-- Sección de conversaciones en grupo -->
+                <div class="conversaciones-grupos">
+                    <h3>Grupos</h3>
+                    <div id="conversation-list-groups">
+                        <!-- Las conversaciones de grupos se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
             </div>
 
+            <!-- Ventana de chat -->
             <div class="ventana-mensajes">
-                <h3>Chat con Maria Lopez</h3>
-                <div class="mensajes">
-                    <p><strong>Tú:</strong> Hola, Maria.</p>
-                    <p><strong>Maria Lopez:</strong> Hola, ¿cómo estás?</p>
+                <h3 id="chat-header">Selecciona una conversación</h3>
+                <div id="message-window" class="mensajes">
+                    <!-- Los mensajes de la conversación activa se cargarán aquí dinámicamente -->
                 </div>
-                <form action="/enviar-mensaje" method="post" class="mensaje-form">
-                    <input type="text" name="mensaje" placeholder="Escribe un mensaje" required>
-                    <button type="submit">Enviar</button>
+                <form id="message-form" class="mensaje-form" onsubmit="return sendMessage(event)">
+                    <input type="text" id="message-input" name="mensaje" placeholder="Escribe un mensaje" required>
+                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </div>
         </div>
@@ -47,23 +58,11 @@
         <button class="nav-button" data-target="timeline" data-href="home.html"><i class="fas fa-home"></i></button>
         <button class="nav-button" data-target="search-friends" data-href="search-friends.html"><i class="fas fa-search"></i></button>
         <button class="nav-button" data-target="profile" data-href="profile.html"><i class="fas fa-user"></i></button>
-        <button class="nav-button" data-target="messages" data-href="mensajes.html"><i class="fas fa-comments"></i></button>
+        <button class="nav-button active" data-target="messages" data-href="mensajes.html"><i class="fas fa-comments"></i></button>
     </nav>
 
-    <script>
-        function abrirConversacion() {
-            alert("Abriendo conversación...");
-        }
-
-        // Script para Manejo de Navegación
-        const buttons = document.querySelectorAll(".nav-button");
-
-        buttons.forEach(button => {
-            button.addEventListener("click", () => {
-                const targetUrl = button.getAttribute("data-href");
-                window.location.href = targetUrl; // Redirigir a la URL correspondiente
-            });
-        });
-    </script>
+    <!-- Script de Socket.io y el JavaScript principal -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="scripts/mensajes.js"></script>
 </body>
 </html>

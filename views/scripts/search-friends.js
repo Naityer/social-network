@@ -1,9 +1,17 @@
-// scripts/search-friends.js
-document.addEventListener('DOMContentLoaded', async () => {
+const userId = localStorage.getItem('userId'); // Verifica si el ID está almacenado
 
+document.addEventListener('DOMContentLoaded', async () => {
     const searchButton = document.querySelector('.search-button');
     const searchInput = document.querySelector('.search-input');
     const resultsList = document.querySelector('.results-list');
+
+    // Verifica si userId está presente
+    if (!userId) {
+        console.log("No se encontró el userId en localStorage.");
+        return;
+    }
+
+    console.log("User ID encontrado:", userId); // Verificar el ID del usuario
 
     // Cargar amigos recientes y sugerencias al inicio
     await loadFriendSuggestions();
@@ -16,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const response = await fetch(`/api/user/search?query=${query}`);
             const friends = await response.json();
+            console.log("Amigos encontrados:", friends); // Verificar la respuesta de la búsqueda
             displayResults(friends, resultsList);
         } catch (error) {
             console.error('Error al buscar amigos:', error);
@@ -30,28 +39,67 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             friends.forEach(friend => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `
+                listItem.innerHTML = ` 
                     ${friend.nombre_completo} (${friend.nombre_usuario}) 
                     <button class="add-button" data-id="${friend.id_usuario}">Agregar</button>
                 `;
                 container.appendChild(listItem);
             });
+
+            // Agregar los event listeners para los botones de agregar
+            document.querySelectorAll('.add-button').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const receiverId = e.target.getAttribute('data-id');
+                    console.log("Enviando solicitud de amistad a:", receiverId); // Verificar el ID de destinatario
+                    await sendFriendRequest(receiverId, e.target);
+                });
+            });
+
+            // Verificar el estado de amistad para cada usuario y actualizar el botón
+            checkFriendshipStatus();
+        }
+    }
+
+    // Función para enviar solicitud de amistad
+    async function sendFriendRequest(receiverId, button) {
+        console.log("Enviando solicitud de amistad a:", receiverId); // Verificar ID del receptor
+        console.log("User ID en la solicitud:", userId); // Verificar que el ID del usuario esté correcto
+
+        try {
+            const response = await fetch(`/api/user/${userId}/send-friend-request`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    receiverId: receiverId, // Enviar el ID del receptor en el cuerpo de la solicitud
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Cambiar el botón a "Pendiente" y desactivarlo
+                button.innerText = 'Pendiente';
+                button.disabled = true; // Desactivar el botón después de enviar la solicitud
+                console.log("Solicitud enviada con éxito.");
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            console.error('Error al enviar solicitud de amistad:', error);
         }
     }
 
     // Cargar amigos recientes y sugerencias
     async function loadFriendSuggestions() {
-        const userId = localStorage.getItem('userId');; // Cambia esto por el ID real del usuario
+        console.log("Cargando sugerencias de amigos...");
         try {
             const response = await fetch(`/api/user/friend-suggestions?userId=${userId}`);
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de la red');
-            }
             const { recentFriends, suggestions } = await response.json();
-            console.log("Amigos recientes:", recentFriends); // Verifica que se cargan los amigos recientes
-            console.log("Sugerencias:", suggestions); // Verifica que se cargan las sugerencias
-            displayFriends(recentFriends, '.recent-friends-list'); // Asegúrate de que este selector exista en tu HTML
-            displayFriends(suggestions, '.suggestions-list'); // Asegúrate de que este selector exista en tu HTML
+            console.log("Sugerencias de amigos:", suggestions); // Verificar las sugerencias
+            displayFriends(recentFriends, '.recent-friends-list');
+            displayFriends(suggestions, '.suggestions-list');
         } catch (error) {
             console.error('Error al cargar amigos recientes y sugerencias:', error);
         }
@@ -69,6 +117,46 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
             container.appendChild(listItem);
         });
+
+        // Agregar los event listeners para los botones de agregar
+        document.querySelectorAll('.add-button').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                const receiverId = e.target.getAttribute('data-id');
+                console.log("Enviando solicitud de amistad a:", receiverId); // Verificar el ID de destinatario
+                await sendFriendRequest(receiverId, e.target);
+            });
+        });
+
+        // Verificar el estado de amistad para cada usuario y actualizar el botón
+        checkFriendshipStatus();
+    }
+
+    // Función para verificar el estado de la amistad entre dos usuarios
+    async function checkFriendshipStatus() {
+        const buttons = document.querySelectorAll('.add-button');
+        for (const button of buttons) {
+            const receiverId = button.getAttribute('data-id');
+            try {
+                const response = await fetch(`/api/user/${userId}/friendship-status?receiverId=${receiverId}`);
+                const data = await response.json();
+
+                if (data.status === 'pendiente') {
+                    button.innerText = 'Pendiente';
+                    button.disabled = true;
+                } else if (data.status === 'aceptada') {
+                    button.innerText = 'Amigos';
+                    button.disabled = true;
+                } else if (data.status === 'sin_solicitud') {
+                    button.innerText = 'Agregar';
+                    button.disabled = false;
+                } else if (data.status === 'rechazada') {
+                    button.innerText = 'Rechazada';
+                    button.disabled = true;
+                }
+            } catch (error) {
+                console.error('Error al verificar el estado de la amistad:', error);
+            }
+        }
     }
 
     loadFriendSuggestions(); // Cargar sugerencias al inicio

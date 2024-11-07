@@ -13,7 +13,7 @@ REGISTRO DE USUARIOS
 ==========================================================================================
 
 */
-exports.register = (req, res) => {
+exports.register = async (req, res) => {
     const { nombreCompleto, nombreUsuario, email, password } = req.body;
     
     // Log para ver los datos recibidos
@@ -25,23 +25,33 @@ exports.register = (req, res) => {
         return res.status(400).json({ error: 'Faltan datos requeridos' });
     }
 
-    // Hashear la contraseña
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    console.log("Contraseña hasheada:", hashedPassword);
-
-    // Llamar al método del modelo para crear el usuario
-    User.createUser(nombreCompleto, nombreUsuario, email, hashedPassword, (err, result) => {
-        if (err) {
-            console.error("Error al registrar usuario:", err);
-            // Manejo del error por duplicado
-            if (err.code === 'ER_DUP_ENTRY') {
-                return res.status(409).json({ error: 'El nombre de usuario o email ya están en uso.' });
-            }
-            return res.status(500).json({ error: 'Error al registrar usuario' });
+    try {
+        // Comprobar si el nombre de usuario ya está registrado
+        const existingUserByUsername = await User.findByUsername(nombreUsuario);
+        if (existingUserByUsername) {
+            return res.status(409).json({ error: 'El nombre de usuario ya está en uso.' });
         }
+
+        // Comprobar si el correo ya está registrado
+        const existingUserByEmail = await User.findByEmail(email);
+        if (existingUserByEmail) {
+            return res.status(409).json({ error: 'El correo electrónico ya está en uso.' });
+        }
+
+        // Hashear la contraseña
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        console.log("Contraseña hasheada:", hashedPassword);
+
+        // Crear el nuevo usuario
+        await User.createUser(nombreCompleto, nombreUsuario, email, hashedPassword);
+
         // Respuesta exitosa
         res.status(201).json({ message: 'Usuario registrado exitosamente' });
-    });
+
+    } catch (err) {
+        console.error("Error al registrar usuario:", err);
+        return res.status(500).json({ error: 'Error al registrar usuario' });
+    }
 };
 
 /*

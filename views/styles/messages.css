@@ -1,0 +1,81 @@
+/* Conversaciones */
+.conversaciones {
+    width: 30%;
+    padding: 10px;
+    overflow-y: auto;
+    border-right: 1px solid #ccc;
+}
+
+.conversaciones h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.conversation {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.conversation:hover {
+    background-color: #f0f0f0;
+}
+
+.conversation-avatar {
+    margin-right: 10px;
+}
+
+.conversation-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.conversation-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.conversation-name {
+    font-weight: bold;
+}
+
+.conversation-last-message {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Ventana de mensajes */
+.ventana-mensajes {
+    width: 70%;
+    padding: 10px;
+}
+
+.mensajes {
+    height: 400px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.mensaje-form {
+    display: flex;
+    align-items: center;
+}
+
+.mensaje-form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+
+.mensaje-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}

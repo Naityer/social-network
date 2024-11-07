@@ -1,206 +1,126 @@
 // models/userModel.js
-const db = require('./db');
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('./db');
 
-/*
-=====================================================================
-    BUSCADORES DE USUARIO REGISTER - LOGIN
-======================================================================
-*/
+// Definición del modelo de Usuario
+const Usuario = sequelize.define('Usuario', {
+  id_usuario: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  nombre_usuario: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  nombre_completo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  contraseña: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  tableName: 'Usuario',
+  timestamps: false, // Si no tienes createdAt y updatedAt en la tabla
+});
 
-// por nombre de usuario
-exports.findByUsername = (username) => {
-  return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM usuario WHERE nombre_usuario = ?', [username], (err, results) => {
-      if (err) return reject(err);
-      resolve(results.length ? results[0] : null); // Devuelve el primer resultado o null si no existe
+// Crear un nuevo usuario
+Usuario.createUser = async (nombreCompleto, nombreUsuario, email, contraseña) => {
+  try {
+    return await Usuario.create({
+      nombre_usuario: nombreUsuario,
+      nombre_completo: nombreCompleto,
+      email,
+      contraseña,
     });
-  });
+  } catch (error) {
+    throw error;
+  }
 };
 
-// por email
-exports.findByEmail = (email) => {
-  return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM usuario WHERE email = ?', [email], (err, results) => {
-      if (err) return reject(err);
-      resolve(results.length ? results[0] : null); // Devuelve el primer resultado o null si no existe
+// Buscar por nombre de usuario
+Usuario.findByUsername = async (username) => {
+  try {
+    return await Usuario.findOne({
+      where: { nombre_usuario: username }
     });
-  });
+  } catch (error) {
+    throw error;
+  }
 };
 
-
-/*
-========================================================================================
-    MODIFICADORES DE TABLA USUARIO
-========================================================================================
-*/
-
-// Insertar 
-exports.createUser = (nombreCompleto, nombreUsuario, email, contraseña) => {
-  return new Promise((resolve, reject) => {
-    db.query(
-      'INSERT INTO Usuario (nombre_usuario, nombre_completo, email, contraseña) VALUES (?, ?, ?, ?)',
-      [nombreUsuario, nombreCompleto, email, contraseña],
-      (err, result) => {
-        if (err) return reject(err);
-        resolve({ id: result.insertId, nombreUsuario, nombreCompleto, email });
-      }
-    );
-  });
-};
-
-// Actualizar 
-exports.updateUser = (id, nombreUsuario, email) => {
-  return new Promise((resolve, reject) => {
-    db.query(
-      'UPDATE Usuario SET nombre_usuario = ?, email = ? WHERE id_usuario = ?',
-      [nombreUsuario, email, id],
-      (err, result) => {
-        if (err) return reject(err);
-        if (result.affectedRows === 0) resolve({ message: 'Usuario no encontrado o sin cambios' });
-        resolve({ message: 'Usuario actualizado', changes: result.affectedRows });
-      }
-    );
-  });
-};
-
-// Eliminar 
-exports.deleteUser = (id) => {
-  return new Promise((resolve, reject) => {
-    db.query('DELETE FROM Usuario WHERE id_usuario = ?', [id], (err, result) => {
-      if (err) return reject(err);
-      if (result.affectedRows === 0) resolve({ message: 'Usuario no encontrado' });
-      resolve({ message: 'Usuario eliminado', changes: result.affectedRows });
+// Buscar por email
+Usuario.findByEmail = async (email) => {
+  try {
+    return await Usuario.findOne({
+      where: { email }
     });
-  });
+  } catch (error) {
+    throw error;
+  }
 };
 
-
-// Obtener lista de amigos de un usuario
-exports.getFriends = (id_usuario) => {
-  return new Promise((resolve, reject) => {
-    db.query(`
-      SELECT Usuario.id_usuario, Usuario.nombre_usuario, Usuario.nombre_completo, Usuario.imagen_perfil_url
-      FROM Amistad
-      JOIN Usuario ON (Amistad.id_usuario2 = Usuario.id_usuario AND Amistad.id_usuario1 = ?)
-      WHERE Amistad.estado = 'aceptada'
-    `, [id_usuario], (err, results) => {
-      if (err) return reject(err);
-      resolve(results);
+// Crear un nuevo usuario
+Usuario.createUser = async (nombreCompleto, nombreUsuario, email, contraseña) => {
+  try {
+    return await Usuario.create({
+      nombre_usuario: nombreUsuario,
+      nombre_completo: nombreCompleto,
+      email,
+      contraseña,
     });
-  });
+  } catch (error) {
+    throw error;
+  }
 };
 
-/*
-========================================================================================
-    BUSCADOR DE USUARIOS - PAGE = search-friend.html
-========================================================================================
-*/
+// Actualizar usuario
+Usuario.updateUser = async (id, nombreUsuario, email) => {
+  try {
+    const user = await Usuario.findByPk(id);
+    if (!user) throw new Error('Usuario no encontrado');
+    return await user.update({ nombre_usuario: nombreUsuario, email });
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Eliminar usuario
+Usuario.deleteUser = async (id) => {
+  try {
+    const user = await Usuario.findByPk(id);
+    if (!user) throw new Error('Usuario no encontrado');
+    await user.destroy();
+    return { message: 'Usuario eliminado' };
+  } catch (error) {
+    throw error;
+  }
+};
 
 // Buscar amigos por nombre
-exports.searchFriendsByName = (name) => {
-  return new Promise((resolve, reject) => {
-      db.query(`
-          SELECT id_usuario, nombre_usuario, nombre_completo 
-          FROM Usuario 
-          WHERE nombre_usuario LIKE CONCAT('%', ?, '%') 
-          OR nombre_completo LIKE CONCAT('%', ?, '%') 
-          LIMIT 10
-      `, [name, name], (err, results) => {
-          if (err) return reject(err);
-          resolve(results);
-      });
-  });
-};
-
-// Obtener los primeros 5 amigos seguidos recientemente
-exports.getRecentFriends = (userId, limit = 5) => {
-  return new Promise((resolve, reject) => {
-      db.query(`
-          SELECT u.id_usuario, u.nombre_usuario, u.nombre_completo, cp.imagen_perfil_url
-          FROM Amistad a
-          JOIN Usuario u ON u.id_usuario = a.id_usuario2
-          LEFT JOIN ConfiguracionPerfil cp ON u.id_usuario = cp.id_usuario
-          WHERE a.id_usuario1 = ? AND a.estado = 'aceptada'
-          ORDER BY a.fecha_solicitud DESC
-          LIMIT ?
-      `, [userId, limit], (err, results) => {
-          if (err) return reject(err);
-          resolve(results);
-      });
-  });
-};
-
-// Obtener 10 sugerencias de usuarios
-exports.getSuggestions = (userId, limit = 10) => {
-  return new Promise((resolve, reject) => {
-      db.query(`
-          SELECT u.id_usuario, u.nombre_usuario, u.nombre_completo, cp.imagen_perfil_url 
-          FROM Usuario u 
-          LEFT JOIN Amistad a ON (a.id_usuario2 = u.id_usuario AND a.id_usuario1 = ?) 
-          LEFT JOIN ConfiguracionPerfil cp ON u.id_usuario = cp.id_usuario
-          WHERE a.estado IS NULL OR a.id_usuario1 IS NULL AND u.id_usuario <> ?
-          LIMIT ?
-      `, [userId, userId, limit], (err, results) => {
-          if (err) return reject(err);
-          resolve(results);
-      });
-  });
-};
-
-/*
-========================================================================================
-    BUSCADOR DE USUARIOS - PAGE = search-friend.html
-========================================================================================
-*/
-
-// Obtener publicaciones de un usuario específico
-exports.getUserPosts = (id_usuario) => {
-  return new Promise((resolve, reject) => {
-    db.query(`
-      SELECT * FROM Publicacion WHERE id_usuario = ? ORDER BY fecha_publicacion DESC
-    `, [id_usuario], (err, results) => {
-      if (err) return reject(err);
-      resolve(results);
+Usuario.searchFriendsByName = async (name) => {
+  try {
+    return await Usuario.findAll({
+      attributes: ['id_usuario', 'nombre_usuario', 'nombre_completo'],
+      where: {
+        [Sequelize.Op.or]: [
+          { nombre_usuario: { [Sequelize.Op.like]: `%${name}%` } },
+          { nombre_completo: { [Sequelize.Op.like]: `%${name}%` } },
+        ],
+      },
+      limit: 10,
     });
-  });
+  } catch (error) {
+    throw error;
+  }
 };
 
-// Obtener amigos en común entre dos usuarios
-exports.getMutualFriends = (id_usuario1, id_usuario2) => {
-  return new Promise((resolve, reject) => {
-    db.query(`
-      SELECT Usuario.id_usuario, Usuario.nombre_usuario, Usuario.nombre_completo, Usuario.imagen_perfil_url
-      FROM Amistad AS A1
-      JOIN Amistad AS A2 ON A1.id_usuario2 = A2.id_usuario2
-      JOIN Usuario ON Usuario.id_usuario = A1.id_usuario2
-      WHERE A1.id_usuario1 = ? AND A2.id_usuario1 = ? AND A1.estado = 'aceptada' AND A2.estado = 'aceptada'
-    `, [id_usuario1, id_usuario2], (err, results) => {
-      if (err) return reject(err);
-      resolve(results);
-    });
-  });
-};
-
-// Obtener perfil de usuario con estadísticas (cantidad de amigos y publicaciones)
-exports.getUserProfileWithStats = (id_usuario) => {
-  return new Promise((resolve, reject) => {
-    db.query(`
-      SELECT 
-        Usuario.id_usuario,
-        Usuario.nombre_usuario,
-        Usuario.nombre_completo,
-        Usuario.email,
-        Usuario.imagen_perfil_url,
-        (SELECT COUNT(*) FROM Amistad WHERE id_usuario1 = ? AND estado = 'aceptada') AS cantidad_amigos,
-        (SELECT COUNT(*) FROM Publicacion WHERE id_usuario = ?) AS cantidad_publicaciones
-      FROM Usuario
-      WHERE id_usuario = ?
-    `, [id_usuario, id_usuario, id_usuario], (err, results) => {
-      if (err) return reject(err);
-      resolve(results.length ? results[0] : null);
-    });
-  });
-};
-
-
-
+module.exports = Usuario;

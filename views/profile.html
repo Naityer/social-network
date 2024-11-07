@@ -17,19 +17,25 @@
     </header>
     <main>
         <div class="profile-container">
-            <h2>Bienvenido, [Nombre del Usuario]</h2>
-            <p>Email: [email@example.com]</p>
-            <p>Nombre Completo: [Nombre Completo]</p>
+            <h2>Bienvenido, <span id="username">[Nombre del Usuario]</span></h2>
+            <p>Email: <span id="email">[email@example.com]</span></p>
+            <p>Nombre Completo: <span id="fullname">[Nombre Completo]</span></p>
             <button class="edit-button">Editar Perfil</button>
+            
             <h3>Publicaciones Recientes:</h3>
             <ul class="publications-list">
                 <li class="publication-item">Publicación 1</li>
                 <li class="publication-item">Publicación 2</li>
                 <!-- Puedes agregar más publicaciones aquí -->
             </ul>
+
+            <!-- Apartado de Notificaciones -->
+            <h3>Solicitudes de Amistad</h3>
+            <ul id="notifications-list">
+                <!-- Las notificaciones se cargarán aquí -->
+            </ul>
         </div>
     </main>
-
     <!-- Barra de Navegación -->
     <nav class="navbar">
         <button class="nav-button" data-target="timeline" data-href="home.html"><i class="fas fa-home"></i></button>
@@ -49,5 +55,8 @@
             });
         });
     </script>
+
+    <!-- Se separa el archivo JavaScript -->
+    <script src="scripts/profile.js"></script>
 </body>
 </html>
